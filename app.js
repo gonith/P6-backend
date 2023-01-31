@@ -1,7 +1,11 @@
 const express = require('express')
+const morgan = require("morgan")
 const mongoose = require('mongoose')
+const path = require('path');
+const helmet = require('helmet')
 
 const userRoutes = require('./routes/users')
+const sauceRoutes = require('./routes/sauces')
 
 mongoose.connect('mongodb+srv://gonith1337:93yPzZHdR6Wvt6ml@piiquante.z1bxx9l.mongodb.net/?retryWrites=true&w=majority',
   { useNewUrlParser: true,
@@ -10,7 +14,7 @@ mongoose.connect('mongodb+srv://gonith1337:93yPzZHdR6Wvt6ml@piiquante.z1bxx9l.mo
   .catch(() => console.log('Connexion à MongoDB échouée !'));
 
 const app = express()
-app.use(express.json())
+app.use(morgan('dev'))
 
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -19,23 +23,13 @@ app.use((req, res, next) => {
     next();
   });
 
-const User = require('./models/users')
+app.use(express.json())
 
+app.use(helmet({crossOriginResourcePolicy: false,}));
+
+// ROUTES
 app.use('/api/auth', userRoutes)
-
-app.post('/api/auth/signup', (req, res, next) => {
-    const user = new User({
-        ...req.body
-    })
-    user.save()
-        .then(() => res.status(201).json({ message: 'Utilisateur crée '}))
-        .catch(error => res.status(400).json({ error }))
-})
-
-app.get('/api/auth/login', (req, res, next) => {
-    user.find()
-        .then(users => res.status(200).json(users))
-        .catch(error => res.status(400).json({ error }))
-})
+app.use('/api/sauces', sauceRoutes)
+app.use('/images', express.static(path.join(__dirname,'images')));
 
 module.exports = app
