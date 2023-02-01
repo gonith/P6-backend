@@ -3,17 +3,17 @@ const fs = require('fs')
 
 exports.createSauce = (req, res) => {
     const sauceObject = JSON.parse(req.body.sauce)
-    delete sauceObject._userId
-    delete sauceObject._id
+    delete sauceObject._userId,
+    delete sauceObject._id;
 
     const sauce = new Sauce({
         ...sauceObject,
         userId: req.auth.userId,
-        imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
-    })
+        imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}` // A revoir
+    });
     sauce.save()
         .then(() => res.status(201).json({message: 'Sauce crée'}))
-        .catch(error => {res.status(400).json({ error })})
+        .catch(error => res.status(400).json({ error }));
 }
 
 
@@ -26,7 +26,7 @@ exports.getAllSauces = (req, res) => {
 exports.modifySauce = (req, res) => {
     const sauceObject = req.file ? {
       ...JSON.parse(req.body.sauce),
-      imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+      imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}` // A revoir
     } : { ...req.body }
 
     delete sauceObject._userId

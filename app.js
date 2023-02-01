@@ -14,7 +14,8 @@ mongoose.connect('mongodb+srv://gonith1337:93yPzZHdR6Wvt6ml@piiquante.z1bxx9l.mo
   .catch(() => console.log('Connexion à MongoDB échouée !'));
 
 const app = express()
-app.use(morgan('dev'))
+
+app.use(morgan('dev'));
 
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -25,11 +26,11 @@ app.use((req, res, next) => {
 
 app.use(express.json())
 
-app.use(helmet({crossOriginResourcePolicy: false,}));
+app.use(helmet({crossOriginResourcePolicy: false,})) // A revoir
 
 // ROUTES
 app.use('/api/auth', userRoutes)
 app.use('/api/sauces', sauceRoutes)
-app.use('/images', express.static(path.join(__dirname,'images')));
+app.use('/images', express.static(path.join(__dirname,'images'))); // A revoir
 
 module.exports = app
