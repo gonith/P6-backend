@@ -11,6 +11,6 @@ router.get('/', auth, saucesCtrl.getAllSauces)
 router.get('/:id', auth, saucesCtrl.getOneSauce)
 router.put('/:id', auth, saucesCtrl.modifySauce)
 router.delete('/:id', auth, saucesCtrl.deleteSauce)
-router.post("/:id/like" , auth, likeControllers.likeSauce)
+router.post("/:id/like", auth, likeControllers.likeSauce)
 
 module.exports = router

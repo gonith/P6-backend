@@ -3,11 +3,12 @@ const morgan = require("morgan")
 const mongoose = require('mongoose')
 const path = require('path');
 const helmet = require('helmet')
+const dotenv = require('dotenv').config()
 
 const userRoutes = require('./routes/users')
 const sauceRoutes = require('./routes/sauces')
 
-mongoose.connect('mongodb+srv://gonith1337:93yPzZHdR6Wvt6ml@piiquante.z1bxx9l.mongodb.net/?retryWrites=true&w=majority',
+mongoose.connect(`mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_CLUSTER}.mongodb.net/?retryWrites=true&w=majority`,
   { useNewUrlParser: true,
     useUnifiedTopology: true })
   .then(() => console.log('Connexion à MongoDB réussie !'))
@@ -26,11 +27,11 @@ app.use((req, res, next) => {
 
 app.use(express.json())
 
-app.use(helmet({crossOriginResourcePolicy: false,})) // A revoir
+app.use(helmet({crossOriginResourcePolicy: false,}))
 
 // ROUTES
 app.use('/api/auth', userRoutes)
 app.use('/api/sauces', sauceRoutes)
-app.use('/images', express.static(path.join(__dirname,'images'))); // A revoir
+app.use('/images', express.static(path.join(__dirname,'images'))); 
 
 module.exports = app
